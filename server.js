@@ -4,6 +4,7 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
 const PORT = 3000;
+let connectedUsers = 0;
 
 app.use(express.static('public'));
 
@@ -12,11 +13,21 @@ server.listen(PORT, () => {
 });
 
 io.on('connection', (socket) => {
+    connectedUsers++;
     console.log('새로운 사용자가 연결되었습니다.');
-  
+    io.emit('user count', connectedUsers);
+
+    socket.on('disconnect', () => {
+        connectedUsers--;
+        console.log('사용자가 연결을 끊었습니다. 현재 접속한 사용자 수:', connectedUsers);
+        
+        // 클라이언트에게 현재 접속 인원 수를 전송
+        io.emit('user count', connectedUsers);
+    });
+
     socket.on('chat message', (data) => {
-      console.log(`${data.nickname}: ${data.message}`);
-      // socket.id를 함께 전송해 누가 보낸 메시지인지 클라이언트에서 구분할 수 있게 함
-      io.emit('chat message', { nickname: data.nickname, message: data.message, id: socket.id });
+      console.log(`${data.id} : ${data.message}`);
+      
+      io.emit('chat message', { id: socket.id, message: data.message});
     });
   });

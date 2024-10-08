@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -10,6 +12,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    font-family: 'Arial', sans-serif;
 }
 
 .chat-container {
@@ -17,39 +20,68 @@ body {
     flex-direction: column;
     width: 600px;
     height: 100%;
-    background: rgb(255, 255, 255);
+    background: #fafafa;
+}
+
+body {
+    font-family: "DM Sans", sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 .chat-header {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    align-items: center; 
+    padding: 10px 18px;
+    background-color: #fff; 
+    border-bottom: 1px solid #ddd; 
     width: 100%;
-    height: 75px;
-    padding: 16px;
-    border-bottom: 1px solid rgb(219, 219, 219);
+    z-index: 1;
 }
 
 .prof-img {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    border-radius: 50%;
     background-image: url('./assets/prof.jpg');
-    background-repeat: no-repeat;
-    background-position: center;
     background-size: cover;
-    width: 45px;
-    height: 45px;
-    border-radius: 100%;
+    background-position: center;
 }
 
-.prof-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+.prof-img::before {
+    content: '';
+    position: absolute;
+    top: -2px; 
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 50%;
+    background: linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);
+    z-index: -1;
 }
 
-.prof-content p:nth-child(1) {font-weight: bold; font-size: 16px;}
-.prof-content p:nth-child(2) {color: #737373; font-size: 12px;}
+.prof-content p {
+    margin-left: 14px;
+    line-height: 1.2;
+}
 
-main {padding-top : 10px; width : 100%; height : 100%;}
+.prof-content p:first-child {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.prof-content p:last-child {
+    color: #999;
+    font-size: 12px;
+}
+
+main {
+    padding-top : 10px; 
+    width : 100%; 
+    height : 100%; 
+}
+
 ul.chat {
     display: flex;
     flex-direction: column;
@@ -76,49 +108,61 @@ ul.chat {
 }
 
 .chat li.me {
-    background : #3797F0;
+    background: #5a13df;
     color: #fff;
+    align-self: flex-end;
 }
 
-/*
-  #chat-messages li {
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 10px;
-    max-width: 80%;
-  }
-  #chat-messages li.user-message {
-    background-color: #007bff;
-    color: white;
-    align-self: flex-start;
-  }
-  #chat-messages li.other-message {
-    background-color: #e9e9eb;
-    align-self: flex-start;
-  }
-  #chat-form {
+.chat-form {
     display: flex;
-    border-top: 1px solid #ccc;
-  }
-  #message-input {
-    flex: 1;
+    align-items: center;
     padding: 10px;
-    border: none;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-  }
-  #message-input:focus {
-    outline: none;
-  }
-  #send-button {
-    background: #007bff;
-    color: white;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+    width: 100%; 
+}
+
+.form-inp {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.inp {
+    width: 100%;
+    padding: 10px 15px; 
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    font-size: 16px; 
+    outline: none; 
+    background-color: #f0f0f0;
+    transition: background-color 0.3s;
+}
+
+.inp:focus {
+    background-color: #fff;
+}
+
+.send {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 10px 15px;
-    border: none;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    cursor: pointer;
-  }
-  #send-button:hover {
-    background-color: #0056b3;
-  } */
+    background-color: #5a13df;
+    border: none; 
+    border-radius: 25px; 
+    cursor: pointer; 
+    transition: background-color 0.3s; 
+}
+
+.send .send-img {
+    width: 20px;
+    height: 20px;
+    background-image: url('./assets/send.png');
+    background-size: cover;
+    background-position: center;
+    
+}
+
+.send:hover {
+    background-color: #6316f3; 
+}

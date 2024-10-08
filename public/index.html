@@ -12,19 +12,16 @@
       <div class="prof-img"></div>
       <div class="prof-content">
         <p>정유권</p>
-        <p>현재 활동 중</p>
+        <p class="user-count">현재 활동 중</p>
       </div>
     </header>
     <main>
-      <ul class="chat">
-        <li>ㅁ</li>
-        <li>ㅁㄴㅇㄹㄴㅇㄹ</li>
-        <li class="me">하이</li>
-      </ul>
+      <ul class="chat"></ul>
       <form class="chat-form">
-        <input type="text" id="nickname-input" autocomplete="off" placeholder="닉네임 입력" />
-        <input type="text" id="message-input" autocomplete="off" placeholder="메시지 입력..." />
-        <button type="submit" id="send-button">전송</button>
+        <div class="form-inp">
+          <input type="text" class="inp" autocomplete="off" placeholder="메시지 입력..." />
+        </div>
+        <button type="submit" class="send"><div class="send-img"></div></button>
       </form>
     </main>
   </div>
@@ -32,22 +29,22 @@
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
-    const chatMessages = document.getElementById('chat-messages');
-    const chatForm = document.getElementById('chat-form');
-    const messageInput = document.getElementById('message-input');
-    const nicknameInput = document.getElementById('nickname-input');
+    const Chat = document.querySelector('.chat');
+    const ChatForm = document.querySelector('.chat-form');
+    const messageInput = document.querySelector('.inp');
+    const userCountDisplay = document.querySelector('.user-count');
 
-    chatForm.addEventListener('submit', (e) => {
+    ChatForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const nickname = nicknameInput.value.trim();
+      const id = socket.id;
       const message = messageInput.value.trim();
 
-      if (nickname !== '' && message !== '') {
-        socket.emit('chat message', { nickname, message });  // 닉네임과 메시지를 서버로 전송
+      if (message !== '') {
+        socket.emit('chat message', { id, message });
         const li = document.createElement('li');
-        li.textContent = `나: ${message}`;
-        li.classList.add('user-message');
-        chatMessages.appendChild(li);
+        li.textContent = `${message}`;
+        li.classList.add('me')
+        Chat.appendChild(li);
         messageInput.value = '';
       }
     });
@@ -55,10 +52,13 @@
     socket.on('chat message', (data) => {
       if (data.id !== socket.id) {
         const li = document.createElement('li');
-        li.textContent = `${data.nickname}: ${data.message}`;
-        li.classList.add('other-message');
-        chatMessages.appendChild(li);
+        li.textContent = `${data.message}`;
+        Chat.appendChild(li);
       }
+    });
+
+    socket.on('user count', (count) => {
+        userCountDisplay.textContent = `현재 활동 중...(${count})`;
     });
   </script>
 </body>
