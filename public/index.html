@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>정유권 채팅</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="chat-container">
+    <header class="chat-header">
+      <div class="prof-img"></div>
+      <div class="prof-content">
+        <p>정유권</p>
+        <p>현재 활동 중</p>
+      </div>
+    </header>
+    <main>
+      <ul class="chat">
+        <li>ㅁ</li>
+        <li>ㅁㄴㅇㄹㄴㅇㄹ</li>
+        <li class="me">하이</li>
+      </ul>
+      <form class="chat-form">
+        <input type="text" id="nickname-input" autocomplete="off" placeholder="닉네임 입력" />
+        <input type="text" id="message-input" autocomplete="off" placeholder="메시지 입력..." />
+        <button type="submit" id="send-button">전송</button>
+      </form>
+    </main>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const chatMessages = document.getElementById('chat-messages');
+    const chatForm = document.getElementById('chat-form');
+    const messageInput = document.getElementById('message-input');
+    const nicknameInput = document.getElementById('nickname-input');
+
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nickname = nicknameInput.value.trim();
+      const message = messageInput.value.trim();
+
+      if (nickname !== '' && message !== '') {
+        socket.emit('chat message', { nickname, message });  // 닉네임과 메시지를 서버로 전송
+        const li = document.createElement('li');
+        li.textContent = `나: ${message}`;
+        li.classList.add('user-message');
+        chatMessages.appendChild(li);
+        messageInput.value = '';
+      }
+    });
+
+    socket.on('chat message', (data) => {
+      if (data.id !== socket.id) {
+        const li = document.createElement('li');
+        li.textContent = `${data.nickname}: ${data.message}`;
+        li.classList.add('other-message');
+        chatMessages.appendChild(li);
+      }
+    });
+  </script>
+</body>
+</html>
