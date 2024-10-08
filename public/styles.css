@@ -108,7 +108,6 @@ ul.chat::-webkit-scrollbar {
     min-width: 30px;
     max-width: 311px;
     height: auto;
-    /*min-height: 40px;*/
     margin: 5px 16px;
     padding: 7px 12px;
     border-radius: 18px;
@@ -126,15 +125,19 @@ ul.chat::-webkit-scrollbar {
     align-self: flex-end;
 }
 
-
-
-.chat li img {
-    max-width: 300px; /* 최대 너비 설정 */
-    border-radius: 10px; /* 이미지 모서리 둥글게 */
-    margin: 5px; /* 이미지 마진 */
+.li-img {
+    background-color : transparent !important;
+    padding: 0 !important;
 }
 
-
+.chat li img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 300px; 
+    border-radius: 10px;
+    padding: 0;
+}
 
 .chat-form {
     display: flex;
@@ -151,11 +154,13 @@ ul.chat::-webkit-scrollbar {
 
 .form-inp {
     flex: 1;
+    display: flex;
+    align-items: center;
     margin-right: 10px;
 }
 
 .inp {
-    width: 100%;
+    flex: 1; 
     padding: 10px 15px; 
     border: 1px solid #ddd;
     border-radius: 25px;
@@ -167,6 +172,27 @@ ul.chat::-webkit-scrollbar {
 
 .inp:focus {
     background-color: #fff;
+}
+
+.image-upload {
+    position: relative; 
+    margin-right: 10px; 
+    cursor: pointer;
+}
+
+.image-upload input[type="file"] {
+    display: none;
+}
+
+.upload-icon {
+    width: 25px; 
+    height: 25px;
+    background-image: url('./assets/upload.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .send {
@@ -187,7 +213,6 @@ ul.chat::-webkit-scrollbar {
     background-image: url('./assets/send.png');
     background-size: cover;
     background-position: center;
-    
 }
 
 .send:hover {

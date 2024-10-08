@@ -19,6 +19,11 @@
       <ul class="chat"></ul>
       <form class="chat-form">
         <div class="form-inp">
+          <label for="image-input" class="image-upload">
+            <input type="file" class="inp-img" id="image-input" accept="image/*" />
+            <div class="upload-icon"></div>
+          </label>
+          
           <input type="text" class="inp" autocomplete="off" placeholder="메시지 입력..." />
         </div>
         <button type="submit" class="send"><div class="send-img"></div></button>
@@ -33,35 +38,62 @@
     const ChatForm = document.querySelector('.chat-form');
     const messageInput = document.querySelector('.inp');
     const userCountDisplay = document.querySelector('.user-count');
+    const imageInput = document.querySelector('.inp-img');
 
     ChatForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const id = socket.id;
       const message = messageInput.value.trim();
 
-      if (message !== '') {
+      if (imageInput.files.length > 0) {
+        const file = imageInput.files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+            const base64Image = reader.result;
+            socket.emit('chat message', { id, message: base64Image });
+            addMessageToChat(base64Image, true);
+            imageInput.value = '';
+        };
+        reader.readAsDataURL(file);
+      } else if (message !== '') {
         socket.emit('chat message', { id, message });
-        const li = document.createElement('li');
-        li.textContent = `${message}`;
-        li.classList.add('me')
-        Chat.appendChild(li);
-        messageInput.value = '';
-        Chat.scrollTop = Chat.scrollHeight;
+        addMessageToChat(message, true);
       }
+
+      messageInput.value = '';
+      Chat.scrollTop = Chat.scrollHeight;
     });
 
     socket.on('chat message', (data) => {
       if (data.id !== socket.id) {
-        const li = document.createElement('li');
-        li.textContent = `${data.message}`;
-        Chat.appendChild(li);
-        Chat.scrollTop = Chat.scrollHeight;
+        addMessageToChat(data.message, false);
       }
     });
 
     socket.on('user count', (count) => {
         userCountDisplay.textContent = `현재 ${count}명이 활동 중`;
     });
+
+    function addMessageToChat(content, isMe) {
+      const li = document.createElement('li');
+      if (isMe) {
+        li.classList.add('me');
+      }
+
+      if (content.startsWith('data:image/')) {
+        const img = document.createElement('img');
+        img.src = content;
+        img.style.maxWidth = '100%';
+        li.classList.add('li-img');
+        li.appendChild(img);
+      } else {
+        li.textContent = content;
+      }
+
+      Chat.appendChild(li);
+      Chat.scrollTop = Chat.scrollHeight;
+    }
   </script>
 </body>
 </html>
