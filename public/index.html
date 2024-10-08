@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>정유권 채팅</title>
+  <title>정유권의 채팅방</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
     <header class="chat-header">
       <div class="prof-img"></div>
       <div class="prof-content">
-        <p>정유권</p>
+        <p>정유권의 채팅방</p>
         <p class="user-count">현재 활동 중</p>
       </div>
     </header>
@@ -39,6 +39,21 @@
     const messageInput = document.querySelector('.inp');
     const userCountDisplay = document.querySelector('.user-count');
     const imageInput = document.querySelector('.inp-img');
+    const MAX_IMAGE_SIZE = 2 * 1024 * 1024;
+
+
+    const uploadIcon = document.querySelector('.upload-icon');
+    imageInput.addEventListener('change', () => {
+      if (imageInput.files.length > 0) {
+        uploadIcon.classList.add('selected');
+        messageInput.placeholder = '사진이 선택되었습니다.';
+        messageInput.disabled = true;
+      } else {
+        uploadIcon.classList.remove('selected');
+        messageInput.placeholder = '메시지 입력...';
+        messageInput.disabled = false;
+      }
+    });
 
     ChatForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -47,13 +62,23 @@
 
       if (imageInput.files.length > 0) {
         const file = imageInput.files[0];
+
+        if (file.size > MAX_IMAGE_SIZE) {
+          alert('잠만여 이미지가 너무 큼;;');
+          return;
+        }
+
         const reader = new FileReader();
 
         reader.onloadend = () => {
             const base64Image = reader.result;
             socket.emit('chat message', { id, message: base64Image });
             addMessageToChat(base64Image, true);
+
             imageInput.value = '';
+            uploadIcon.classList.remove('selected');
+            messageInput.placeholder = '메시지 입력...';
+            messageInput.disabled = false;
         };
         reader.readAsDataURL(file);
       } else if (message !== '') {

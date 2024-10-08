@@ -193,6 +193,13 @@ ul.chat::-webkit-scrollbar {
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 3px;
+    transition: background-image 0.3s;
+}
+
+.upload-icon.selected {
+    background: #6316f3 url('./assets/upload-select.png') no-repeat center center; /* 선택 시 배경색과 이미지 설정 */
+    background-size: cover;
 }
 
 .send {
