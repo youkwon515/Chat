@@ -46,6 +46,7 @@
         li.classList.add('me')
         Chat.appendChild(li);
         messageInput.value = '';
+        Chat.scrollTop = Chat.scrollHeight;
       }
     });
 
@@ -54,11 +55,12 @@
         const li = document.createElement('li');
         li.textContent = `${data.message}`;
         Chat.appendChild(li);
+        Chat.scrollTop = Chat.scrollHeight;
       }
     });
 
     socket.on('user count', (count) => {
-        userCountDisplay.textContent = `현재 활동 중...(${count})`;
+        userCountDisplay.textContent = `현재 ${count}명이 활동 중`;
     });
   </script>
 </body>

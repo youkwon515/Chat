@@ -21,7 +21,6 @@ io.on('connection', (socket) => {
         connectedUsers--;
         console.log('사용자가 연결을 끊었습니다. 현재 접속한 사용자 수:', connectedUsers);
         
-        // 클라이언트에게 현재 접속 인원 수를 전송
         io.emit('user count', connectedUsers);
     });
 
