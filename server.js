@@ -7,6 +7,7 @@ const io = require('socket.io')(server, {
 
 const PORT = 3000;
 let connectedUsers = 0;
+let userNumber = 1;
 
 app.use(express.static('public'));
 
@@ -15,19 +16,23 @@ server.listen(PORT, () => {
 });
 
 io.on('connection', (socket) => {
+    const assignedNumber = userNumber++;
     connectedUsers++;
-    console.log('새로운 사용자가 연결되었습니다.');
+
+    socket.emit('user number', { number: assignedNumber });
     io.emit('user count', connectedUsers);
+
+    console.log(`새로운 사용자가 연결되었습니다. 사용자 번호: ${assignedNumber}`);
 
     socket.on('disconnect', () => {
         connectedUsers--;
-        console.log('사용자가 연결을 끊었습니다. 현재 접속한 사용자 수:', connectedUsers);
+        console.log(`사용자 ${assignedNumber}가 연결을 끊었습니다.`);
         
         io.emit('user count', connectedUsers);
     });
 
     socket.on('chat message', (data) => {
-      console.log(`${data.id} : ${data.message}`);
+      console.log(`${assignedNumber} : ${data.message}`);
       
       io.emit('chat message', { id: socket.id, message: data.message});
     });

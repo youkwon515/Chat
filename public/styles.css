@@ -198,7 +198,7 @@ ul.chat::-webkit-scrollbar {
 }
 
 .upload-icon.selected {
-    background: #6316f3 url('./assets/upload-select.png') no-repeat center center; /* 선택 시 배경색과 이미지 설정 */
+    background: #6316f3 url('./assets/upload-select.png') no-repeat center center;
     background-size: cover;
 }
 
